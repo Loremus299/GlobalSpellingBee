@@ -1,0 +1,25 @@
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  actions:
+    runs-on: docker
+    container:
+      image: node:22-alpine
+    steps:
+      - name: Checkout of repo at main
+        uses: actions/checkout@main
+
+      - name: Pushing on github
+        run: |
+          apk add --no-cache git
+          git init
+          git remote add github https://${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/Loremus299/GlobalSpellingBee.git
+          git config --global user.email "github@loremus.gay"
+          git config --global user.name "colon3"
+          git add .
+          git commit -m "syncing from git.gay" || echo "No changes to commit"
+          git branch -M main
+          git push -u github main --force
